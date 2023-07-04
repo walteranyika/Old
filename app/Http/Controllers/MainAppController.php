@@ -46,6 +46,8 @@ class MainAppController extends Controller
         } else if ($size == 3 and $exploded_text[1] == "1" and $exploded_text[2] == "2") { //1*1*1 Search artist
             //search by song
             return  $this->showSearchBySongMenu();
+        }else{
+            return $this->showWrongInputMenu("Skiza services are currently down. Please try again later");
         }
         //TODO Handle other paths
     }
@@ -105,7 +107,7 @@ class MainAppController extends Controller
                 if (!Hash::check($pin, $artist->pin)) {
                     return $this->showWrongInputMenu("Wrong PIN. Please try again");
                 }
-                
+
                 $amount = $exploded_text[3];
                 $duration = $exploded_text[4]=="1"? 6 : 12;
                 $artist->loans()->create(['amount'=>$amount, 'duration'=>$duration]);
