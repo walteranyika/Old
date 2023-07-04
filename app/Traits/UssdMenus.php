@@ -76,7 +76,7 @@ trait UssdMenus{
     {
         $start = "Terms and conditions\n";
         $start .= "1. Accept and Proceed\n";
-        $start .= "2. Decline and Canncel";
+        $start .= "2. Decline and Cancel";
         return $this->ussd_proceed($start);
     }
 
