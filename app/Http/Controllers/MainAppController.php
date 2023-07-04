@@ -77,7 +77,12 @@ class MainAppController extends Controller
                     return $this->showWrongInputMenu("Wrong PIN. Please try again");
                 }
             }
-        } else if ($size == 3) { //1*PIN*1
+        } else if ($size == 3) {
+            $pin = $exploded_text[1];
+            if (!Hash::check($pin, $artist->pin)) {
+                return $this->showWrongInputMenu("Wrong PIN. Please try again");
+            }
+
             if ($exploded_text[2] == "1") {
                 $amount = $artist->amountLimit->advance_limit;
                 return $this->showLimitMenu($amount);
@@ -96,6 +101,11 @@ class MainAppController extends Controller
                 //check if it was accepted and show the processing message
             if ($exploded_text[5] == "1") { //accedpted
                 //Collect the data and insert into the DB
+                $pin = $exploded_text[1];
+                if (!Hash::check($pin, $artist->pin)) {
+                    return $this->showWrongInputMenu("Wrong PIN. Please try again");
+                }
+                
                 $amount = $exploded_text[3];
                 $duration = $exploded_text[4]=="1"? 6 : 12;
                 $artist->loans()->create(['amount'=>$amount, 'duration'=>$duration]);
