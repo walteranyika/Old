@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('artists', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("phone")->unique();
+            $table->string("phone")->unique()->index();
             $table->string("pin")->nullable();
             $table->timestamps();
         });

@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Traits;
 
-trait UssdMenus{
-    public function showMainMenu(){
+trait UssdMenus
+{
+    public function showMainMenu()
+    {
         $start = "Welcome\n";
         $start .= "1. Skiza Download\n";
         $start .= "2. Mkononi Royalty Advance Service";
@@ -47,14 +50,14 @@ trait UssdMenus{
     {
         $start = "Mkononi Royalty\n";
         $start .= "1. Check Limit\n";
-        $start .= "2. Request Advance\n";
-        $start .= "3. Terms and Condition";
+        $start .= "2. Request Advance";
         return $this->ussd_proceed($start);
     }
 
     public function showLimitMenu($limit)
     {
-        $start = "Your Mkononi Advance Service limit is KES. $limit.";
+        $limit = number_format($limit, 2);
+        $start = "Your Mkononi Advance Service limit is Ksh.$limit.";
         return $this->ussd_stop($start);
     }
 
@@ -64,12 +67,29 @@ trait UssdMenus{
         return $this->ussd_proceed($start);
     }
 
-    public function showAdvanceOptionsMenu()
+    public function showDurationsMenu()
     {
         $start = "Please select your preffered repayment option\n";
         $start .= "1. 6 Months\n";
         $start .= "2. 12 Months";
         return $this->ussd_proceed($start);
+    }
+
+    public function accentDeclineLoan($amount, $duration)
+    {
+        $amount = number_format($amount, 2);
+        $start = "Royalty Advance amount is Ksh $amount, repayment period is $duration months\n";
+        $start .= "1. Accept\n";
+        $start .= "2. Cancel";
+        return $this->ussd_proceed($start);
+    }
+
+    public function showAmountLimitErrorMenu($amount, $limit)
+    {
+        $amount = number_format($amount, 2);
+        $limit = number_format($limit, 2);
+        $start = "The requested amount of Ksh.$amount cannnot exceed the loan limit of Ksh.$limit.";
+        return $this->ussd_stop($start);
     }
 
     public function showAcceptDeclineTermsMenu()
@@ -102,20 +122,21 @@ trait UssdMenus{
 
     public function showLoginMenu()
     {
-        $start = "Mkononi Royalty\n";
+        $start = "Mkononi Royalty Advance System\n";
         $start .= "Please Enter Your PIN";
         return $this->ussd_proceed($start);
     }
 
     public function showNewPINMenu()
     {
-        $start = "Mkononi Royalty\n";
+        $start = "Mkononi Royalty Advance System\n";
         $start .= "Please setup your preffered 4 Digit PIN";
         return $this->ussd_proceed($start);
     }
 
 
-    public function showWrongInputMenu($text="Invalid input. Please try again"){
+    public function showSomethingBadMenu($text = "Invalid input. Please try again")
+    {
         return $this->ussd_stop($text);
     }
 }

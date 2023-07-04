@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Loan extends Model
 {
     use HasFactory;
-    protected $fillable = ["amount", "code", "duration", "processed"];
+    protected $fillable = ["amount", "code", "duration", "processed", "repaid"];
 
     public function artist(): BelongsTo{
         return $this->belongsTo(Artist::class);

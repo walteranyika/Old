@@ -17,7 +17,7 @@ return new class extends Migration
             $table->float("amount");
             $table->integer("duration");
             $table->float("code")->nullable();
-            $table->boolean("processed")->default("false");
+            $table->boolean("cleared")->default(false);
             $table->timestamps();
         });
     }
