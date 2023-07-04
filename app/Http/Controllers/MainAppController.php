@@ -6,6 +6,8 @@ use App\Models\Artist;
 use Illuminate\Http\Request;
 use App\Traits\UssdMenus;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
+
 
 class MainAppController extends Controller
 {
@@ -18,21 +20,45 @@ class MainAppController extends Controller
         $phone       = str_replace("+", "", $request["phoneNumber"]);
         $text        = $request["text"];
 
-        $exploded_text = explode("*", $text);
+        $currentString = "";
+        if (Redis::exists("user:sessions:$sessionId")) {
+            $currentString = Redis::get("user:sessions:$sessionId");
+        } else {
+            Redis::set("user:sessions:$sessionId", "");
+        }
 
+        if($text=="1" or $text=="2"){
+            Redis::set("user:sessions:$sessionId", $text);
+            $currentString = Redis::get("user:sessions:$sessionId");
+        }
 
-        if (empty($text)) {
+        $exploded_text_user = explode("*", $text);
+        $exploded_text = explode("*", $currentString);
+
+        if (empty($currentString)) {
             return $this->showMainMenu();
         } elseif ($exploded_text[0] == "1") {
-            return $this->handleSkizaTune($phone, $exploded_text);
+            return $this->handleSkizaTune($phone, $exploded_text, $exploded_text_user);
         } elseif ($exploded_text[0] == "2") {
-            return  $this->handleAdvanceService($phone, $exploded_text);
+            return  $this->handleAdvanceService($phone, $exploded_text, $exploded_text_user);
         } else {
             return $this->showWrongInputMenu();
         }
     }
 
-    private function handleSkizaTune($phone, $exploded_text)
+    public function testRedis(Request $request)
+    {
+        $sessionId = "2222";
+        $currentString = "";
+        if (Redis::exists("user:sessions:$sessionId")) {
+            $currentString = Redis::get("user:sessions:$sessionId");
+        } else {
+            // Redis::set("user:sessions:$sessionId", "Helo");
+        }
+        return Redis::get("user:sessions:$sessionId");
+    }
+
+    private function handleSkizaTune($phone, $exploded_text, $exploded_text_user)
     {
         $size = sizeof($exploded_text);
         if ($size == 1) { //1
@@ -46,17 +72,17 @@ class MainAppController extends Controller
         } else if ($size == 3 and $exploded_text[1] == "1" and $exploded_text[2] == "2") { //1*1*1 Search artist
             //search by song
             return  $this->showSearchBySongMenu();
-        }else{
+        } else {
             return $this->showWrongInputMenu("Skiza services are currently down. Please try again later");
         }
         //TODO Handle other paths
     }
 
-    private function handleAdvanceService($phone, $exploded_text) //check if phone is registered and show the right pin menu
+    private function handleAdvanceService($phone, $exploded_text, $exploded_text_user) //check if phone is registered and show the right pin menu
     {
         $size = sizeof($exploded_text);
         $artist = Artist::where(['phone' => $phone])->first();
-       // dd($artist);
+        // dd($artist);
         if ($size == 1) { //1 ->>ask for new pin setup or enter a pin
             if ($artist == null) {
                 return $this->showWrongInputMenu("You have not been registered to use this service.");
@@ -100,7 +126,7 @@ class MainAppController extends Controller
         } else if ($size == 5 and $exploded_text[2] == "2") {
             return $this->showAcceptDeclineTermsMenu();
         } else if ($size == 6 and $exploded_text[2] == "2") {
-                //check if it was accepted and show the processing message
+            //check if it was accepted and show the processing message
             if ($exploded_text[5] == "1") { //accedpted
                 //Collect the data and insert into the DB
                 $pin = $exploded_text[1];
@@ -109,10 +135,10 @@ class MainAppController extends Controller
                 }
 
                 $amount = $exploded_text[3];
-                $duration = $exploded_text[4]=="1"? 6 : 12;
-                $artist->loans()->create(['amount'=>$amount, 'duration'=>$duration]);
+                $duration = $exploded_text[4] == "1" ? 6 : 12;
+                $artist->loans()->create(['amount' => $amount, 'duration' => $duration]);
                 return  $this->showFinalAdvanceMenu();
-            } else {//rejected
+            } else { //rejected
                 return $this->showRejectMenu();
             }
         }
