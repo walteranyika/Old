@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class MainAppController extends Controller
 {
     use UssdMenus;
+    private $skizaCode = "22";
 
     public function ussdRequestHandler(Request $request)
     {
@@ -17,17 +18,17 @@ class MainAppController extends Controller
         $serviceCode = $request["serviceCode"];
         $phone       = str_replace("+", "", $request["phoneNumber"]);
         $text        = $request["text"];
-        $exploded_text = explode("*", $text);
 
+        if(empty($text)){
+            $exploded_text =[];
+        }else{
+            $exploded_text = explode("*", trim($text));
+        }
 
-        if (empty($text)) {
-            return $this->showMainMenu();
-        } elseif ($exploded_text[0] == "1") {
+        if (sizeof($exploded_text)>0 && $exploded_text[0] == $this->skizaCode) {
             return $this->handleSkizaTune($phone, $exploded_text);
-        } elseif ($exploded_text[0] == "2") {
-            return  $this->handleAdvanceService($phone, $exploded_text);
         } else {
-            return $this->showWrongInputMenu();
+            return  $this->handleAdvanceService($phone, $exploded_text);
         }
     }
 
@@ -48,24 +49,22 @@ class MainAppController extends Controller
         }else{
             return $this->showSomethingBadMenu("Skiza services are currently down. Please try again later");
         }
-        //TODO Handle other paths
     }
 
     private function handleAdvanceService($phone, $exploded_text) //check if phone is registered and show the right pin menu
     {
         $size = sizeof($exploded_text);
         $artist = Artist::where(['phone' => $phone])->first();
-       // dd($artist);
-        if ($size == 1) { //1 ->>ask for new pin setup or enter a pin
+        if (empty($exploded_text)) { //0 Main menu ->>ask for new pin setup or enter a pin
             if ($artist == null) {
-                return $this->showSomethingBadMenu("You have not been registered to use this service.");
+                return $this->showSomethingBadMenu("Welcome to Mkononi Royalty Advance System.\n Unfortunately, you have not been registered to use this service. Thank you");
             } else if ($artist->pin != null) { //ask for the pin
                 return $this->showLoginMenu();
             } else if ($artist->pin == null) { //set up a new pin
                 return $this->showNewPINMenu();
             }
-        } else if ($size == 2) { //either logging in or 
-            $pin = $exploded_text[1];
+        } else if ($size == 1) { //either logging in or 
+            $pin = $exploded_text[0];
             if ($artist->pin == null) { //register
                 $artist->pin = Hash::make($pin);
                 $artist->save();
@@ -79,33 +78,33 @@ class MainAppController extends Controller
                     return $this->showSomethingBadMenu("Wrong PIN. Please try again");
                 }
             }
-        } else if ($size == 3) { //accept or decline terms and conditions
-            if ($exploded_text[2] == "1") {
+        } else if ($size == 2) { //accept or decline terms and conditions
+            if ($exploded_text[1] == "1") {
                 return $this->showMkononiMainMenu();
             }else{
                 return $this->showRejectMenu();
             }
-        } else if($size == 4){
-            $pin = $exploded_text[1];
+        } else if($size == 3){
+            $pin = $exploded_text[0];
             if (!Hash::check($pin, $artist->pin)) {
                 return $this->showSomethingBadMenu("Wrong PIN. Please try again");
             }
 
-            if ($exploded_text[3] == "1") {
+            if ($exploded_text[2] == "1") {
                 $loans = $artist->loans->sum('amount');
                 $payments = $artist->payments->sum('amount');
                 $difference = $loans - $payments;
                 $limit = $artist->amountLimit->advance_limit - $difference;
                 return $this->showLimitMenu($limit);
-            } else if ($exploded_text[3] == "2") {
+            } else if ($exploded_text[2] == "2") {
                 //Start requesting for advance
                 return $this->showAdvanceAmountMenu();
             } else  {
                 //show terms and conditions
                 return $this->showSomethingBadMenu("Invalid entry. Please try again");
             }
-        } else if($size == 5 and $exploded_text[3] == "2"){
-            $amount =  $exploded_text[4];
+        } else if($size == 4 and $exploded_text[2] == "2"){
+            $amount =  $exploded_text[3];
             $loans = $artist->loans->sum('amount');
             $payments = $artist->payments->sum('amount');
             $difference = $loans-$payments;
@@ -115,18 +114,18 @@ class MainAppController extends Controller
                 return $this->showAmountLimitErrorMenu($amount, $limit);
             }
             return $this->showDurationsMenu();
-        } else if ($size == 6 and $exploded_text[3] == "2") {
-            $duration = $exploded_text[5] == "1" ? 6 : 12;
-            $amount =  $exploded_text[4] ;
+        } else if ($size == 5 and $exploded_text[2] == "2") {
+            $duration = $exploded_text[4] == "1" ? 6 : 12;
+            $amount =  $exploded_text[3] ;
             return $this->accentDeclineLoan($amount, $duration);
-        } else if ($size == 7 and $exploded_text[3] == "2") { //final 
-            if($exploded_text[6] == "1" and $exploded_text[2] == "1"){
-                    $pin = $exploded_text[1];
+        } else if ($size == 6 and $exploded_text[2] == "2") { //final 
+            if($exploded_text[5] == "1" and $exploded_text[1] == "1"){
+                    $pin = $exploded_text[0];
                     if (!Hash::check($pin, $artist->pin)) {
                         return $this->showSomethingBadMenu("Wrong PIN. Please try again");
                     }
-                    $amount = $exploded_text[4];
-                    $duration = $exploded_text[5] == "1" ? 6 : 12;
+                    $amount = $exploded_text[3];
+                    $duration = $exploded_text[4] == "1" ? 6 : 12;
                     $artist->loans()->create(['amount' => $amount, 'duration' => $duration]);
                     return  $this->showFinalAdvanceMenu();
             }else{
