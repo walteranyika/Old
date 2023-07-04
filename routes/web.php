@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/4dbbcf85b5bd89d2b4e783f1c6bc17d3', [MainAppController::class, 'ussdRequestHandler']);
+Route::post('/4dbbcf85b5bd89d2b4e783f1c6bc17d3', [MainAppController::class, 'ussdRequestHandler']);
