@@ -97,7 +97,7 @@ class MainAppController extends Controller
 
             if ($exploded_text[2] == "1") {
                 $loans = $artist->artistLoans->sum('amount');
-                $payments = $artist->payments->sum('amount');
+                $payments = $artist->artistPayments->sum('amount');
                 $difference = $loans - $payments;
                 $limit = $artist->amountLimit->advance_limit - $difference;
                 return $this->showLimitMenu($limit);
@@ -110,8 +110,8 @@ class MainAppController extends Controller
             }
         } else if ($size == 4 and $exploded_text[2] == "2") {
             $amount =  $exploded_text[3];
-            $loans = $artist->loans->sum('amount');
-            $payments = $artist->payments->sum('amount');
+            $loans = $artist->artistLoans->sum('amount');
+            $payments = $artist->artistPayments->sum('amount');
             $difference = $loans - $payments;
             $limit = $artist->amountLimit->advance_limit - $difference;
 

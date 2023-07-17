@@ -39,8 +39,18 @@ class Artist extends Model
         return $this->hasMany(Loan::class, 'artist_id', 'id');
     }
 
+    public function loans()
+    {
+        return $this->hasMany(Loan::class, 'artist_id', 'id');
+    }
+
     public function amountLimit()
     {
         return $this->hasOne(AmountLimit::class);
+    }
+
+    public function artistPayments()
+    {
+        return $this->hasMany(Payment::class, 'artist_id', 'id');
     }
 }

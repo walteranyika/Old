@@ -87,6 +87,16 @@
             </a>
         </li>
         @endcan
+        @can('payment_access')
+        <li class="c-sidebar-nav-item">
+            <a href="{{ route("admin.payments.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/payments") || request()->is("admin/payments/*") ? "c-active" : "" }}">
+                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                </i>
+                {{ trans('cruds.payment.title') }}
+            </a>
+        </li>
+        @endcan
         @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
         @can('profile_password_edit')
         <li class="c-sidebar-nav-item">
