@@ -2,29 +2,40 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Artist extends Model
 {
-    use HasFactory;
-    protected $fillable =['name','phone', 'pin', 'pin_reset'];
+    use SoftDeletes, HasFactory;
 
-    public function amountLimit(): HasOne
+    public $table = 'artists';
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    protected $fillable = [
+        'name',
+        'phone',
+        'pin',
+        'pin_reset',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    protected function serializeDate(DateTimeInterface $date)
     {
-        return $this->hasOne(AmountLimit::class);
+        return $date->format('Y-m-d H:i:s');
     }
 
-    public function loans(): HasMany
+    public function artistLoans()
     {
-        return $this->hasMany(Loan::class);
-    }
-
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Loan::class, 'artist_id', 'id');
     }
 }

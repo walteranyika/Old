@@ -14,6 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call([
+            PermissionsTableSeeder::class,
+            RolesTableSeeder::class,
+            PermissionRoleTableSeeder::class,
+            UsersTableSeeder::class,
+            RoleUserTableSeeder::class,
+        ]);
+        
         $artists =[
             ['name'=> 'Sifaeli Mwabuka','phone'=> '254718345852', 'limit'=> 535277.0],
             ['name' => 'St Joseph Catholic Choir Kendu Bay', 'phone' => '254718768800', 'limit' =>  98079.04],
