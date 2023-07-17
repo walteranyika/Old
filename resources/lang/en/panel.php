@@ -1,6 +1,5 @@
 <?php
 
 return [
-    'site_title' => 'ssd',
-
+    'site_title' => 'Advance System',
 ];
