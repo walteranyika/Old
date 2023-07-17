@@ -2,13 +2,24 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 
-class RoleUserTableSeeder extends Seeder
+class RolesTableSeeder extends Seeder
 {
     public function run()
     {
-        User::findOrFail(1)->roles()->sync(1);
+        $roles = [
+            [
+                'id'    => 1,
+                'title' => 'Admin',
+            ],
+            [
+                'id'    => 2,
+                'title' => 'User',
+            ],
+        ];
+
+        Role::insert($roles);
     }
 }
