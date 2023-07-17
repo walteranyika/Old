@@ -60,7 +60,7 @@
         @can('artist_access')
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.artists.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/artists") || request()->is("admin/artists/*") ? "c-active" : "" }}">
-                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+                <i class="fa-fw fas fa-music c-sidebar-nav-icon">
 
                 </i>
                 {{ trans('cruds.artist.title') }}
@@ -70,7 +70,7 @@
         @can('loan_access')
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.loans.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/loans") || request()->is("admin/loans/*") ? "c-active" : "" }}">
-                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+                <i class="fa-fw fas fa-handshake-o c-sidebar-nav-icon">
 
                 </i>
                 {{ trans('cruds.loan.title') }}
@@ -80,7 +80,7 @@
         @can('amount_limit_access')
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.amount-limits.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/amount-limits") || request()->is("admin/amount-limits/*") ? "c-active" : "" }}">
-                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+                <i class="fa-fw fas fa-suitcase c-sidebar-nav-icon">
 
                 </i>
                 {{ trans('cruds.amountLimit.title') }}
@@ -90,7 +90,7 @@
         @can('payment_access')
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.payments.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/payments") || request()->is("admin/payments/*") ? "c-active" : "" }}">
-                <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+                <i class="fa-fw fas fa-tasks c-sidebar-nav-icon">
 
                 </i>
                 {{ trans('cruds.payment.title') }}
