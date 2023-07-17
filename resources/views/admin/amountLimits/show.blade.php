@@ -28,7 +28,7 @@
                             {{ trans('cruds.amountLimit.fields.royalties') }}
                         </th>
                         <td>
-                            {{ $amountLimit->royalties }}
+                            @money($amountLimit->royalties)
                         </td>
                     </tr>
                     <tr>
@@ -36,7 +36,7 @@
                             {{ trans('cruds.amountLimit.fields.advance_limit') }}
                         </th>
                         <td>
-                            {{ $amountLimit->advance_limit }}
+                            @money($amountLimit->advance_limit)
                         </td>
                     </tr>
                     <tr>

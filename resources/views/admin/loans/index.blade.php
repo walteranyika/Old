@@ -16,7 +16,7 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Loan">
+            <table class=" table table-bordered table-striped table-hover datatable datatable-Loan" id="myTable">
                 <thead>
                     <tr>
                         <th width="10">
@@ -25,14 +25,14 @@
                         <th>
                             {{ trans('cruds.loan.fields.id') }}
                         </th>
-                        <th>
+                        <th class="text-right">
                             {{ trans('cruds.loan.fields.amount') }}
                         </th>
                         <th>
-                            {{ trans('cruds.loan.fields.code') }}
+                            Transaction {{ trans('cruds.loan.fields.code') }}
                         </th>
                         <th>
-                            {{ trans('cruds.loan.fields.duration') }}
+                            {{ trans('cruds.loan.fields.duration') }} Months
                         </th>
                         <th>
                             {{ trans('cruds.loan.fields.processed') }}
@@ -60,8 +60,8 @@
                         <td>
                             {{ $loan->id ?? '' }}
                         </td>
-                        <td>
-                            {{ $loan->amount ?? '' }}
+                        <td class="text-right">
+                            @money($loan->amount)
                         </td>
                         <td>
                             {{ $loan->code ?? '' }}
@@ -123,8 +123,7 @@
     $(function() {
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
         @can('loan_delete')
-        let deleteButtonTrans = '{{ trans('
-        global.datatables.delete ') }}'
+        let deleteButtonTrans = 'Delete'
         let deleteButton = {
             text: deleteButtonTrans,
             url: "{{ route('admin.loans.massDestroy') }}",
@@ -137,14 +136,12 @@
                 });
 
                 if (ids.length === 0) {
-                    alert('{{ trans('
-                        global.datatables.zero_selected ') }}')
+                    alert('0 Selected')
 
                     return
                 }
 
-                if (confirm('{{ trans('
-                        global.areYouSure ') }}')) {
+                if (confirm('Are you sure?')) {
                     $.ajax({
                             headers: {
                                 'x-csrf-token': _token
@@ -179,6 +176,8 @@
             $($.fn.dataTable.tables(true)).DataTable()
                 .columns.adjust();
         });
+
+
 
     })
 </script>

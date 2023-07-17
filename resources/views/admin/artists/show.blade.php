@@ -49,6 +49,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.artist.fields.enabled') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $artist->enabled ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.artist.fields.created_at') }}
                         </th>
                         <td>

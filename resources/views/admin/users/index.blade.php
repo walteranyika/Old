@@ -16,7 +16,7 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-User">
+            <table class=" table table-bordered table-striped table-hover datatable datatable-User" id="myTable">
                 <thead>
                     <tr>
                         <th width="10">
@@ -105,8 +105,7 @@
     $(function() {
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
         @can('user_delete')
-        let deleteButtonTrans = '{{ trans('
-        global.datatables.delete ') }}'
+        let deleteButtonTrans = 'Delete'
         let deleteButton = {
             text: deleteButtonTrans,
             url: "{{ route('admin.users.massDestroy') }}",
@@ -119,14 +118,12 @@
                 });
 
                 if (ids.length === 0) {
-                    alert('{{ trans('
-                        global.datatables.zero_selected ') }}')
+                    alert('0 Items Selected')
 
                     return
                 }
 
-                if (confirm('{{ trans('
-                        global.areYouSure ') }}')) {
+                if (confirm('Are you sure?')) {
                     $.ajax({
                             headers: {
                                 'x-csrf-token': _token

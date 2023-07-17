@@ -28,7 +28,7 @@
                             {{ trans('cruds.loan.fields.amount') }}
                         </th>
                         <td>
-                            {{ $loan->amount }}
+                            Ksh @money($loan->amount)
                         </td>
                     </tr>
                     <tr>

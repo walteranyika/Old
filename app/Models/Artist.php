@@ -24,6 +24,7 @@ class Artist extends Model
         'phone',
         'pin',
         'pin_reset',
+        'enabled',
         'created_at',
         'updated_at',
         'deleted_at',

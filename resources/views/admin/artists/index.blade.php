@@ -16,7 +16,7 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Artist">
+            <table class=" table table-bordered table-striped table-hover datatable datatable-Artist" id="myTable">
                 <thead>
                     <tr>
                         <th width="10">
@@ -32,6 +32,9 @@
                             {{ trans('cruds.artist.fields.phone') }}
                         </th>
                         <th>
+                            {{ trans('cruds.artist.fields.enabled') }}?
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -39,13 +42,14 @@
                         <td>
                         </td>
                         <td>
-                            <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                         </td>
                         <td>
                             <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                         </td>
                         <td>
                             <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                        </td>
+                        <td>
                         </td>
                         <td>
                         </td>
@@ -65,6 +69,10 @@
                         </td>
                         <td>
                             {{ $artist->phone ?? '' }}
+                        </td>
+                        <td>
+                            <span style="display:none">{{ $artist->enabled ?? '' }}</span>
+                            <input type="checkbox" disabled="disabled" {{ $artist->enabled ? 'checked' : '' }}>
                         </td>
                         <td>
                             @can('artist_show')
@@ -104,10 +112,10 @@
 @parent
 <script>
     $(function() {
+
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
         @can('artist_delete')
-        let deleteButtonTrans = '{{ trans('
-        global.datatables.delete ') }}'
+        let deleteButtonTrans = 'Delete'
         let deleteButton = {
             text: deleteButtonTrans,
             url: "{{ route('admin.artists.massDestroy') }}",
@@ -120,14 +128,12 @@
                 });
 
                 if (ids.length === 0) {
-                    alert('{{ trans('
-                        global.datatables.zero_selected ') }}')
+                    alert('0 Items Selected')
 
                     return
                 }
 
-                if (confirm('{{ trans('
-                        global.areYouSure ') }}')) {
+                if (confirm('Are you sure?')) {
                     $.ajax({
                             headers: {
                                 'x-csrf-token': _token

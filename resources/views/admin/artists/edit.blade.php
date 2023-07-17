@@ -44,6 +44,19 @@
                 <span class="help-block">{{ trans('cruds.artist.fields.pin_reset_helper') }}</span>
             </div>
             <div class="form-group">
+                <div class="form-check {{ $errors->has('enabled') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="enabled" value="0">
+                    <input class="form-check-input" type="checkbox" name="enabled" id="enabled" value="1" {{ $artist->enabled || old('enabled', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="enabled">{{ trans('cruds.artist.fields.enabled') }}</label>
+                </div>
+                @if($errors->has('enabled'))
+                <div class="invalid-feedback">
+                    {{ $errors->first('enabled') }}
+                </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.artist.fields.enabled_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

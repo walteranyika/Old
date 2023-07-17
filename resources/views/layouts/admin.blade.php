@@ -21,6 +21,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.0/css/perfect-scrollbar.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
     @yield('styles')
 </head>
@@ -110,25 +111,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
         $(function() {
-            let copyButtonTrans = '{{ trans('
-            global.datatables.copy ') }}'
-            let csvButtonTrans = '{{ trans('
-            global.datatables.csv ') }}'
-            let excelButtonTrans = '{{ trans('
-            global.datatables.excel ') }}'
-            let pdfButtonTrans = '{{ trans('
-            global.datatables.pdf ') }}'
-            let printButtonTrans = '{{ trans('
-            global.datatables.print ') }}'
-            let colvisButtonTrans = '{{ trans('
-            global.datatables.colvis ') }}'
-            let selectAllButtonTrans = '{{ trans('
-            global.select_all ') }}'
-            let selectNoneButtonTrans = '{{ trans('
-            global.deselect_all ') }}'
+            let copyButtonTrans = 'Copy'
+            let csvButtonTrans = 'CSV'
+            let excelButtonTrans = 'Excel'
+            let pdfButtonTrans = 'PDF'
+            let printButtonTrans = 'Print'
+            let colvisButtonTrans = 'Colvis'
+            let selectAllButtonTrans = 'Select All'
+            let selectNoneButtonTrans = 'Deselect all'
 
             let languages = {
                 'en': 'https://cdn.datatables.net/plug-ins/1.10.19/i18n/English.json'

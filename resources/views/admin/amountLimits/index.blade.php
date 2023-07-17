@@ -16,31 +16,30 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-AmountLimit">
+            <table class=" table table-bordered table-striped table-hover datatable datatable-AmountLimit" id="myTable">
                 <thead>
                     <tr>
-                        <th width="10">
-
-                        </th>
-                        <th>
-                            {{ trans('cruds.amountLimit.fields.id') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.amountLimit.fields.royalties') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.amountLimit.fields.advance_limit') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.amountLimit.fields.artist') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.artist.fields.phone') }}
-                        </th>
-                        <th>
-                            &nbsp;
-                        </th>
-                    </tr>
+                        <th width=" 10">
+                </th>
+                <th>
+                    {{ trans('cruds.amountLimit.fields.id') }}
+                </th>
+                <th class="text-right">
+                    {{ trans('cruds.amountLimit.fields.royalties') }}
+                </th>
+                <th class="text-right">
+                    {{ trans('cruds.amountLimit.fields.advance_limit') }}
+                </th>
+                <th>
+                    {{ trans('cruds.amountLimit.fields.artist') }}
+                </th>
+                <th>
+                    {{ trans('cruds.artist.fields.phone') }}
+                </th>
+                <th>
+                    &nbsp;
+                </th>
+                </tr>
                 </thead>
                 <tbody>
                     @foreach($amountLimits as $key => $amountLimit)
@@ -51,11 +50,11 @@
                         <td>
                             {{ $amountLimit->id ?? '' }}
                         </td>
-                        <td>
-                            {{ $amountLimit->royalties ?? '' }}
+                        <td class="text-right">
+                            @money($amountLimit->royalties)
                         </td>
-                        <td>
-                            {{ $amountLimit->advance_limit ?? '' }}
+                        <td class="text-right">
+                            @money($amountLimit->advance_limit)
                         </td>
                         <td>
                             {{ $amountLimit->artist->name ?? '' }}
@@ -101,10 +100,10 @@
 @parent
 <script>
     $(function() {
+
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
         @can('amount_limit_delete')
-        let deleteButtonTrans = '{{ trans('
-        global.datatables.delete ') }}'
+        let deleteButtonTrans = 'Delete'
         let deleteButton = {
             text: deleteButtonTrans,
             url: "{{ route('admin.amount-limits.massDestroy') }}",
@@ -117,14 +116,12 @@
                 });
 
                 if (ids.length === 0) {
-                    alert('{{ trans('
-                        global.datatables.zero_selected ') }}')
+                    alert('0 Selected')
 
                     return
                 }
 
-                if (confirm('{{ trans('
-                        global.areYouSure ') }}')) {
+                if (confirm('Are you sure?')) {
                     $.ajax({
                             headers: {
                                 'x-csrf-token': _token

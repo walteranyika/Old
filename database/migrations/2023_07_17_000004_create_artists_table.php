@@ -14,6 +14,7 @@ class CreateArtistsTable extends Migration
             $table->string('phone')->unique();
             $table->string('pin')->nullable();
             $table->boolean('pin_reset')->default(0)->nullable();
+            $table->boolean('enabled')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
