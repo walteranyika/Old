@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("phone")->unique()->index();
             $table->string("pin")->nullable();
+            $table->boolean("pin_reset")->default(false);
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Artist extends Model
 {
     use HasFactory;
-    protected $fillable =['name','phone', 'pin'];
+    protected $fillable =['name','phone', 'pin', 'pin_reset'];
 
     public function amountLimit(): HasOne
     {

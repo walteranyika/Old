@@ -75,10 +75,13 @@ trait UssdMenus
         return $this->ussd_proceed($start);
     }
 
-    public function accentDeclineLoan($amount, $duration)
+    public function acceptDeclineLoan($amount, $duration, $name, $repayment_amount)
     {
         $amount = number_format($amount, 2);
-        $start = "Royalty Advance amount is Ksh $amount, repayment period is $duration months\n";
+        $repayment_amount = number_format($repayment_amount, 2);
+        $names = explode(" ", $name);
+        $firstName = $names[0];
+        $start = "Dear $firstName, your  Royalty Advance amount is Ksh. $amount, repayable with Ksh. $repayment_amount for $duration months\n";
         $start .= "1. Accept\n";
         $start .= "2. Cancel";
         return $this->ussd_proceed($start);
@@ -88,7 +91,7 @@ trait UssdMenus
     {
         $amount = number_format($amount, 2);
         $limit = number_format($limit, 2);
-        $start = "The requested amount of Ksh.$amount cannnot exceed the loan limit of Ksh.$limit.";
+        $start = "The requested amount of Ksh.$amount cannnot exceed the advance limit of Ksh.$limit.";
         return $this->ussd_stop($start);
     }
 
@@ -102,7 +105,7 @@ trait UssdMenus
 
     public function showFinalAdvanceMenu()
     {
-        $start = "Your advance request has been received and will be processed shortly.";
+        $start = "Your Royalty Advance request has been received. You will receive a confirmation SMS shortly.";
         return $this->ussd_stop($start);
     }
     public function showRejectMenu()
