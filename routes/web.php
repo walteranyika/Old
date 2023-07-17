@@ -59,4 +59,5 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
         Route::post('profile/destroy', 'ChangePasswordController@destroy')->name('password.destroyProfile');
     }
 });
-Route::post('/4dbbcf85b5bd89d2b4e783f1c6bc17d3', [MainAppController::class, 'ussdRequestHandler']);
+Route::post('/4dbbcf85b5bd89d2b4e783f1c6bc17d3', [MainAppController::class, 'ussdRequestHandler'])
+    ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);;

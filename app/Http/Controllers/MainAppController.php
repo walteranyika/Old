@@ -96,7 +96,7 @@ class MainAppController extends Controller
             }
 
             if ($exploded_text[2] == "1") {
-                $loans = $artist->loans->sum('amount');
+                $loans = $artist->artistLoans->sum('amount');
                 $payments = $artist->payments->sum('amount');
                 $difference = $loans - $payments;
                 $limit = $artist->amountLimit->advance_limit - $difference;
